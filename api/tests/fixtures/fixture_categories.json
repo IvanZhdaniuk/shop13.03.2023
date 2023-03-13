@@ -1,0 +1,26 @@
+[
+    {
+        "model": "api.category",
+        "pk": 1,
+        "fields": {
+            "name": "category1",
+            "description": "some description"
+        }
+    },
+  {
+        "model": "api.category",
+        "pk": 2,
+        "fields": {
+            "name": "category2",
+            "description": "some description"
+        }
+  },
+  {
+        "model": "api.category",
+        "pk": 3,
+        "fields": {
+            "name": "category3",
+            "description": "some description"
+        }
+  }
+]

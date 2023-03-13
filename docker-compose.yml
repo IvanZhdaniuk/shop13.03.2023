@@ -1,0 +1,47 @@
+version: "3"
+
+services:
+  app:
+    command: >
+      sh -c "python3 manage.py migrate &&
+             python3 manage.py createsuperuser --noinput --phone 111 --email test@test.com
+             python3 manage.py runserver 0.0.0.0:8000"
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+  db:
+    image: postgres:12.0-alpine
+    container_name: db
+    volumes:
+      - postgres_data:/app
+    environment:
+      - POSTGRES_USER=olga
+      - POSTGRES_PASSWORD=
+      - POSTGRES_DB=shop
+    ports:
+      - "5432:5432"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+  redis:
+    image: redis:alpine
+  celery:
+    restart: always
+    build:
+      context: .
+    command: >
+        sh -c "celery -A shop worker -l info"
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+      - redis
+      - app
+volumes:
+  postgres_data:
